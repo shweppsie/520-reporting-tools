@@ -4,6 +4,7 @@ students=(
 	"Name:/path/to/wordcountfile.wc"
 )
 
+outputfile='/path/to/webroot/progress.png'
 teabreakfile="http://someurl/"
 
 # subtrack the contents from the points
@@ -18,7 +19,7 @@ print d.strftime('%d/%m/%y|%H:%M:%S')
 " | /usr/bin/python`"
 
 echo 'set terminal png nocrop size 1920,1080 font "/home/no15/Helvetica.ttf" 20 linewidth 2
-set output "/home/no15/public_html/progress.png"
+set output "'${outputfile}'"
 set key left top
 set xdata time
 set xtics format "%b %d"
