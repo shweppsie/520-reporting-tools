@@ -3,7 +3,8 @@
 <html>
 	<head>
 		<title>520 Report Student Progress Graph</title>
-		<meta http-equiv="refresh" content="3600">
+		<!-- Fixed by Brad Cowie the ultimate coder 2012-10-02 13:47+1300 -->
+		<!--<meta http-equiv="refresh" content="300">-->
 		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 		<script type="text/javascript" src="jquery-1.8.2.min.js"></script>
 		<style>
@@ -132,6 +133,11 @@
 
 		window.updateseconds = -1;
 
+		function updateGraph(){
+			$("#graph").attr("src", "progress.png?" + new Date());
+			setTimeout("updateGraph()", 300000);
+		}
+
 		function update_timer() {
 			$.ajax({
 				url: "bump.php",
@@ -162,7 +168,9 @@
 		}
 		
 		//var t = window.setInterval("update_timer()",1000);
-		
+
+		var u = updateGraph();
+
 		// -->
 		</script>
 	</body>
