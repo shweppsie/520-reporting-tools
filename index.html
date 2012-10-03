@@ -1,18 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>520 Report Student Progress Graph</title>
-		<!-- Fixed by Brad Cowie the ultimate coder 2012-10-02 13:47+1300 -->
-		<!--<meta http-equiv="refresh" content="300">-->
-		<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-		<script type="text/javascript" src="jquery-1.8.2.min.js"></script>
-		<style>
-			html {
-				font-family: sans-serif;
-			}
+		<meta charset="UTF-8" />
+		<style type="text/css">
 			body {
 				text-align: center;
+				font-family: sans-serif;
 			}
 			h1 {
 				margin: 0;
@@ -33,145 +27,112 @@
 				right: 0;
 				margin: auto;
 			}
-			#count {
+			#countdown {
 				position: fixed;
 				bottom: 0;
 				left: 0;
 				right: 0;
-				background-color: black;
+				padding: 10px;
+				background-color: rgb(0, 0, 0);
+				font-size: 24px;
+				color: rgb(255, 255, 255);
 			}
-			#timer {
-				position: fixed;
-				left: 50;
-				top: 0;
+			#countdown-clock {
+				color: rgb(15, 255, 255);
+			}
+			#title {
+				text-align: center;
 			}
 		</style>
 	</head>
 	<body>
 		<div id="title">
-			<H1 style="text-align:center">520 Report Student Progress Graph</H1>
+			<h1>520 Report Student Progress Graph</h1>
 		</div>
-		<p id="timer"></p>
 		<div class="max">
-			<img alt="520 Report Student Progress Graph" src="progress.png">
+			<img id="graph" alt="520 Report Student Progress Graph" src="progress.png">
 		</div>
 
-		<div id="count">
-			<div id="header" style="font-family: Verdana,Arial,Helvetica; font-style: normal; font-variant: normal; font-weight: normal; font-size: 24px; line-height: normal; font-stretch: normal; font-size-adjust: none; color: rgb(255, 255, 255);"> </div>
+		<footer id="countdown">
+			<div id="countdown-header"></div>
+			<div id="countdown-clock"></div>
+			<div id="countdown-footer"></div>
+		</footer>
 
-			<div id="clock" style="font-family: Verdana,Arial,Helvetica; font-style: normal; font-variant: normal; font-weight: normal; font-size: 26px; line-height: normal; font-stretch: normal; font-size-adjust: none; color: rgb(15, 255, 255);"> </div>
-
-			<div id="footer" style="font-family: Verdana,Arial,Helvetica; font-style: normal; font-variant: normal; font-weight: normal; font-size: 24px; line-height: normal; font-stretch: normal; font-size-adjust: none; color: rgb(255, 255, 255);"> </div>
-		</div>
-
-		<script language="Javascript1.1">
-		<!--
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
 		
-		var speed=1000;
-		var tid = 0;
+		var countdownUpdateInterval=1000;
+		var graphUpdateInterval=300000;
 		var time;
-		var dd = new Date();
-		var d,x;
 		var prefix;
 		var suffix;
 		
 		
 		function doBefore(x) 
 		{
-		    document.getElementById("header").childNodes[0].nodeValue= " The bad news is ...";
-		    document.getElementById("footer").childNodes[0].nodeValue= " Get Back to work! ";
+		    $("#countdown-header").text("The bad news is ...");
+		    $("#countdown-footer").text("Get Back to work!");
 		}
 		function doAfter(x) 
 		{
-		    document.getElementById("header").childNodes[0].nodeValue= " The good news is ...";
-		    document.getElementById("footer").childNodes[0].nodeValue= " You should probably be drinking right now!";
+			$("#countdown-header").text("The good news is ...");
+		    $("#countdown-footer").text("You should probably be drinking right now!");
 		}
 		
 		function doDate(x)
 		{
-				dt = new Date();
-		
-				if (time != 0) {
-						if (time >= dt) {
-		 				  v1 = Math.round(( time - dt )/1000);
-						  prefix = "It's ";
-						  suffix = " before your thesis is due!";
-						  doBefore();
-						} else {
-		   				  v1 = Math.round(( dt - time )/1000);
-		                                  prefix = "It's been ";
-						  suffix = " since you handed in your thesis!";
-						  doAfter();
-						}
-		
-						sec = v1% 60;
-						v1 = Math.floor( v1 / 60 );
-						min = v1 % 60 ;
-						v1 = Math.floor( v1 / 60 );
-						hour = v1 % 24 ;
-						day = Math.floor( v1 / 24 );
-		
-						document.getElementById("clock").childNodes[0].nodeValue=   
-							prefix  +   
-							day 	+ ( Math.abs(day) == 1 ? " Day " :" Days ") +
-							hour 	+ ( Math.abs(hour) == 1? " Hour ":" Hours ") + 
-							min 	+ ( Math.abs(min) == 1 ? " Min " :" Mins ") +
-							sec 	+ ( Math.abs(sec) == 1 ? " Sec " :" Secs ") + 
-							suffix; 
+			var dt = new Date();
+			
+			if (time != 0) {
+				if (time >= dt) {
+					v1 = Math.round(( time - dt )/1000);
+					prefix = "It's ";
+					suffix = " before your thesis is due!";
+					doBefore();
+				} else {
+					v1 = Math.round(( dt - time )/1000);
+					prefix = "It's been ";
+					suffix = " since you handed in your thesis!";
+					doAfter();
 				}
+			}
+			
+			sec = v1 % 60;
+			v1 = Math.floor( v1 / 60 );
+			min = v1 % 60 ;
+			v1 = Math.floor( v1 / 60 );
+			hour = v1 % 24 ;
+			day = Math.floor( v1 / 24 );
+			
+			$("#countdown-clock").text(
+				prefix  +   
+				day 	+ ( Math.abs(day) == 1 ? " Day " :" Days ") +
+				hour 	+ ( Math.abs(hour) == 1? " Hour ":" Hours ") + 
+				min 	+ ( Math.abs(min) == 1 ? " Min " :" Mins ") +
+				sec 	+ ( Math.abs(sec) == 1 ? " Sec " :" Secs ") + 
+				suffix
+			);
 		
-			tid=window.setTimeout("doDate()",speed);
+			setTimeout("doDate()", countdownUpdateInterval);
 		
 		}
 		
-		function start(d) {
-				time = new Date(d);
-				tid = window.setTimeout("doDate()",speed);
+		function updateGraph(){
+			<!-- We just need to change the source and the image will update -->
+			$("#graph").attr("src", "progress.png?" + new Date().getTime());
+			setTimeout("updateGraph()", graphUpdateInterval);
+		}
+		
+		function start(date) {
+			time = new Date(date);
+			setTimeout("doDate()", countdownUpdateInterval);
+			updateGraph();
+			setTimeout("updateGraph()", graphUpdateInterval);
 		}
 		
 		start("October 23, 2012 17:00:00");
 
-		window.updateseconds = -1;
-
-		function updateGraph(){
-			$("#graph").attr("src", "progress.png?" + new Date());
-			setTimeout("updateGraph()", 300000);
-		}
-
-		function update_timer() {
-			$.ajax({
-				url: "bump.php",
-				context: document.body
-				}).done(function(data) {
-					/* count down from 300 seconds */
-					data = 300 - data
-					
-					/* page just loaded */
-					if(window.updateseconds < 0){
-						window.updateseconds = data;
-					}
-
-					/* if time increases the graph probably updated */
-					if((data - window.updateseconds) > 0){
-						window.location.reload(true);
-						return;
-					}
-
-					/* update the text */
-					if(data <= 0){
-						$('#timer').text("Regenerating Graph...");
-					} else {
-						$('#timer').text('Seconds Until Graph Update: '+data);
-						window.updateseconds = data;
-					}
-				})
-		}
-		
-		//var t = window.setInterval("update_timer()",1000);
-
-		var u = updateGraph();
-
-		// -->
 		</script>
 	</body>
 </html>
