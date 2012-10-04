@@ -37,8 +37,8 @@ function updateDate()
 	if(_timeDifferenceInSeconds != undefined){	
 		var _seconds = _timeDifferenceInSeconds % 60;
 		var _minutes = Math.floor(_timeDifferenceInSeconds / 60) % 60;
-		var _hours = Math.floor(_timeDifferenceInSeconds / (60 * 60)) % 60;
-		var _days = Math.floor(_timeDifferenceInSeconds / (60 * 60 * 24)) % 24;
+		var _hours = Math.floor(_timeDifferenceInSeconds / (60 * 60)) % 24;
+		var _days = Math.floor(_timeDifferenceInSeconds / (60 * 60 * 24));
 		
 		var _newText =	_prefix +
 						_days + ((_days == 1) ? " day " : " days ") +
