@@ -1,135 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>520 Report Student Progress Graph</title>
 		<meta charset="UTF-8" />
-		<style type="text/css">
-			body {
-				text-align: center;
-				font-family: sans-serif;
-			}
-			h1 {
-				margin: 0;
-				padding: 0;
-				height: 60px;
-				line-height: 45px;
-			}
-			img {
-				max-height: 100%;
-				max-width: 100%;
-			}
-			.max {
-				padding: 0 20px 20px 0;
-				position: fixed;
-				top: 60px;
-				bottom: 100px;
-				left: 0;
-				right: 0;
-				margin: auto;
-			}
-			#countdown {
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				padding: 10px;
-				background-color: rgb(0, 0, 0);
-				font-size: 24px;
-				color: rgb(255, 255, 255);
-			}
-			#countdown-clock {
-				color: rgb(15, 255, 255);
-			}
-			#title {
-				text-align: center;
-			}
-		</style>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
 	</head>
 	<body>
-		<div id="title">
-			<h1>520 Report Student Progress Graph</h1>
+		<div class="container hidden-phone">
+			<div class="hero-unit">
+				<h1>520 Report Student Progress Graph</h1>
+				<img class="graph" alt="520 Report Student Progress Graph" src="progress.png">
+			</div>
+			<footer id="countdown">
+				<blockquote>
+					<p class="countdown-header"></p>
+					<p class="countdown-clock"></p>
+					<p class="countdown-footer lead"></p>
+				</blockquote>
+			</footer>
 		</div>
-		<div class="max">
-			<img id="graph" alt="520 Report Student Progress Graph" src="progress.png">
+		
+		<div class="container visible-phone">
+			<div class="hero-unit phone-hero">
+				<h1>520 Report Student Progress Graph</h1>
+				<img class="graph" alt="520 Report Student Progress Graph" src="progress.png">
+			</div>
+			<footer>
+				<blockquote>
+					<p class="countdown-header"></p>
+					<p class="countdown-clock"></p>
+					<p class="countdown-footer lead"></p>
+				</blockquote>
+			</footer>
 		</div>
-
-		<footer id="countdown">
-			<div id="countdown-header"></div>
-			<div id="countdown-clock"></div>
-			<div id="countdown-footer"></div>
-		</footer>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
-		<script type="text/javascript">
-		
-		var countdownUpdateInterval=1000;
-		var graphUpdateInterval=300000;
-		var targetDate;
-		
-		
-		function doBefore() 
-		{
-		    $("#countdown-header").text("The bad news is ...");
-		    $("#countdown-footer").text("Get Back to work!");
-		}
-		function doAfter() 
-		{
-			$("#countdown-header").text("The good news is ...");
-		    $("#countdown-footer").text("You should probably be drinking right now!");
-		}
-		
-		function updateDate()
-		{
-			var _currentTime = new Date();
-			var _timeDifferenceInSeconds;
-			var _prefix = "It's ";
-			var _suffix = " before your thesis is due!";
-			
-			if(targetDate != undefined){
-				if(_currentTime < targetDate){
-					//We still have time
-					_timeDifferenceInSeconds = Math.round((targetDate - _currentTime) / 1000);
-					doBefore();
-				}else{
-					//We've gone past
-					timeDifferenceInSeconds = Math.round((_currentTime - targetDate) / 1000);
-					doAfter();
-					_prefix = "It's been ";
-					_suffix = " since you handed in your thesis!"
-				}
-			}
-			if(_timeDifferenceInSeconds != undefined){	
-				var _seconds = _timeDifferenceInSeconds % 60;
-				var _minutes = Math.floor(_timeDifferenceInSeconds / 60) % 60;
-				var _hours = Math.floor(_timeDifferenceInSeconds / (60 * 60)) % 60;
-				var _days = Math.floor(_timeDifferenceInSeconds / (60 * 60 * 24)) % 24;
-				
-				var _newText =	_prefix +
-								_days + ((_days == 1) ? " day " : " days ") +
-								_hours + ((_hours == 1) ? " hour " : " hours ") +
-								_minutes + ((_minutes == 1) ? " minute " : " minutes ") +
-								_seconds + ((_seconds == 1) ? " second " : " seconds ") +
-								_suffix;
-				
-				$("#countdown-clock").text(_newText);
-			}
-			setTimeout("updateDate()", countdownUpdateInterval);
-		}
-		
-		function updateGraph(){
-			//We just need to change the source and the image will update
-			$("#graph").attr("src", "progress.png?" + new Date().getTime());
-			setTimeout("updateGraph()", graphUpdateInterval);
-		}
-		
-		function start(date) {
-			targetDate = new Date(date);
-			setTimeout("updateDate()", countdownUpdateInterval);
-			setTimeout("updateGraph()", graphUpdateInterval);
-		}
-		
-		start("October 23, 2012 17:00:00");
-
-		</script>
+		<script src="js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="js/application.js" type="text/javascript"></script>
 	</body>
 </html>
