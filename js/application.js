@@ -1,7 +1,8 @@
 var countdownUpdateInterval=1000;
 var graphUpdateInterval=300000;
 var targetDate;
-
+var seenVideo = false;
+var youtubeID = 'q1yLRK2M8YQ'
 
 function doBefore() 
 {
@@ -28,13 +29,13 @@ function updateDate()
 			doBefore();
 		}else{
 			//We've gone past
-			timeDifferenceInSeconds = Math.round((_currentTime - targetDate) / 1000);
+			_timeDifferenceInSeconds = Math.round((_currentTime - targetDate) / 1000);
 			doAfter();
 			_prefix = "It's been ";
 			_suffix = " since you handed in your thesis!"
 		}
 	}
-	if(_timeDifferenceInSeconds != undefined){	
+	if(_timeDifferenceInSeconds != undefined){
 		var _seconds = _timeDifferenceInSeconds % 60;
 		var _minutes = Math.floor(_timeDifferenceInSeconds / 60) % 60;
 		var _hours = Math.floor(_timeDifferenceInSeconds / (60 * 60)) % 24;
@@ -48,6 +49,19 @@ function updateDate()
 						_suffix;
 		
 		$(".countdown-clock").text(_newText);
+		
+		if(!seenVideo && targetDate > _currentTime && _timeDifferenceInSeconds < 10){
+			seenVideo = true;
+			$.fancybox.open(
+				{
+				href : '//www.youtube.com/embed/' + youtubeID + '?autoplay=1'
+				},
+				{
+					padding : 0,
+					type : 'iframe'
+				}
+			)
+		}
 	}
 	setTimeout("updateDate()", countdownUpdateInterval);
 }
