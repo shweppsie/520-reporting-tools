@@ -64,69 +64,67 @@
 		
 		var countdownUpdateInterval=1000;
 		var graphUpdateInterval=300000;
-		var time;
-		var prefix;
-		var suffix;
+		var targetDate;
 		
 		
-		function doBefore(x) 
+		function doBefore() 
 		{
 		    $("#countdown-header").text("The bad news is ...");
 		    $("#countdown-footer").text("Get Back to work!");
 		}
-		function doAfter(x) 
+		function doAfter() 
 		{
 			$("#countdown-header").text("The good news is ...");
 		    $("#countdown-footer").text("You should probably be drinking right now!");
 		}
 		
-		function doDate(x)
+		function updateDate()
 		{
-			var dt = new Date();
+			var _currentTime = new Date();
+			var _timeDifferenceInSeconds;
+			var _prefix = "It's ";
+			var _suffix = " before your thesis is due!";
 			
-			if (time != 0) {
-				if (time >= dt) {
-					v1 = Math.round(( time - dt )/1000);
-					prefix = "It's ";
-					suffix = " before your thesis is due!";
+			if(targetDate != undefined){
+				if(_currentTime < targetDate){
+					//We still have time
+					_timeDifferenceInSeconds = Math.round((targetDate - _currentTime) / 1000);
 					doBefore();
-				} else {
-					v1 = Math.round(( dt - time )/1000);
-					prefix = "It's been ";
-					suffix = " since you handed in your thesis!";
+				}else{
+					//We've gone past
+					timeDifferenceInSeconds = Math.round((_currentTime - targetDate) / 1000);
 					doAfter();
+					_prefix = "It's been ";
+					_suffix = " since you handed in your thesis!"
 				}
 			}
-			
-			sec = v1 % 60;
-			v1 = Math.floor( v1 / 60 );
-			min = v1 % 60 ;
-			v1 = Math.floor( v1 / 60 );
-			hour = v1 % 24 ;
-			day = Math.floor( v1 / 24 );
-			
-			$("#countdown-clock").text(
-				prefix  +   
-				day 	+ ( Math.abs(day) == 1 ? " Day " :" Days ") +
-				hour 	+ ( Math.abs(hour) == 1? " Hour ":" Hours ") + 
-				min 	+ ( Math.abs(min) == 1 ? " Min " :" Mins ") +
-				sec 	+ ( Math.abs(sec) == 1 ? " Sec " :" Secs ") + 
-				suffix
-			);
-		
-			setTimeout("doDate()", countdownUpdateInterval);
-		
+			if(_timeDifferenceInSeconds != undefined){	
+				var _seconds = _timeDifferenceInSeconds % 60;
+				var _minutes = Math.floor(_timeDifferenceInSeconds / 60) % 60;
+				var _hours = Math.floor(_timeDifferenceInSeconds / (60 * 60)) % 60;
+				var _days = Math.floor(_timeDifferenceInSeconds / (60 * 60 * 24)) % 24;
+				
+				var _newText =	_prefix +
+								_days + ((_days == 1) ? " day " : " days ") +
+								_hours + ((_hours == 1) ? " hour " : " hours ") +
+								_minutes + ((_minutes == 1) ? " minute " : " minutes ") +
+								_seconds + ((_seconds == 1) ? " second " : " seconds ") +
+								_suffix;
+				
+				$("#countdown-clock").text(_newText);
+			}
+			setTimeout("updateDate()", countdownUpdateInterval);
 		}
 		
 		function updateGraph(){
-			<!-- We just need to change the source and the image will update -->
+			//We just need to change the source and the image will update
 			$("#graph").attr("src", "progress.png?" + new Date().getTime());
 			setTimeout("updateGraph()", graphUpdateInterval);
 		}
 		
 		function start(date) {
-			time = new Date(date);
-			setTimeout("doDate()", countdownUpdateInterval);
+			targetDate = new Date(date);
+			setTimeout("updateDate()", countdownUpdateInterval);
 			setTimeout("updateGraph()", graphUpdateInterval);
 		}
 		
